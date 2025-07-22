@@ -1,0 +1,20 @@
+from twilio.rest import Client
+import os
+
+# Credenciais do Twilio (usar variáveis de ambiente)
+account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+client = Client(account_sid, auth_token)
+
+# Número formatado para o padrão E.164 (ex: +5511999998888)
+telefone_formatado = f"+55{cliente['telefone']}" 
+
+try:
+    message = client.messages.create(
+        from_='whatsapp:+14155238886', # Número sandbox do Twilio
+        body=f"Olá, {cliente['nome_cliente']}! Identificamos notas fiscais disponíveis para antecipação. Tem interesse em saber mais?",
+        to=f'whatsapp:{telefone_formatado}'
+    )
+    print(f"WhatsApp enviado para {telefone_formatado}, SID: {message.sid}")
+except Exception as e:
+    print(f"Falha ao enviar WhatsApp para {telefone_formatado}: {e}")
