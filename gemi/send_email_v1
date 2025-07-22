@@ -1,0 +1,37 @@
+import smtplib
+from email.message import EmailMessage
+import os # Para segurança das credenciais
+
+# ATENÇÃO: Nunca coloque sua senha diretamente no código.
+# Use variáveis de ambiente.
+EMAIL_ADDRESS = os.getenv('MEU_EMAIL')
+EMAIL_PASSWORD = os.getenv('MINHA_SENHA_EMAIL')
+
+for index, cliente in df_clientes.iterrows():
+    msg = EmailMessage()
+    msg['Subject'] = f"Oportunidade de Antecipação de Notas Fiscais para {cliente['nome_cliente']}"
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = cliente['email']
+
+    # Corpo do e-mail em HTML para melhor formatação
+    msg.set_content(f"""
+    Olá, {cliente['nome_cliente']}!
+
+    Tudo bem?
+
+    Identificamos que sua empresa possui notas fiscais disponíveis para antecipação através da plataforma eNotas.
+    Esta é uma excelente oportunidade para otimizar seu fluxo de caixa.
+
+    Gostaria de saber mais detalhes sobre como proceder?
+
+    Atenciosamente,
+    Seu Time Financeiro
+    """, subtype='html')
+
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp: # Exemplo para Gmail
+            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            smtp.send_message(msg)
+            print(f"E-mail enviado com sucesso para {cliente['email']}")
+    except Exception as e:
+        print(f"Falha ao enviar e-mail para {cliente['email']}: {e}")
